@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "pages/api/near-callback.js": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "N8N_WEBHOOK_URL": "@n8n-webhook-url",
+    "TRANSACTION_STORAGE_URL": "@transaction-storage-url"
+  }
+}
+
