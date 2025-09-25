@@ -1,0 +1,81 @@
+{
+    "name": "DAO Payout with Proof Storage",
+    "nodes": [
+      {
+        "parameters": {},
+        "name": "When clicking ‘Execute workflow’",
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [50, 300],
+        "id": "trigger-node"
+      },
+      {
+        "parameters": {
+          "receiverId": "dao-member.near",
+          "amount": "10"
+        },
+        "name": "Execute NEAR Payout",
+        "type": "n8n-nodes-ticklu.nearPayout",
+        "typeVersion": 1,
+        "position": [250, 300],
+        "id": "payout-node"
+      },
+      {
+        "parameters": {
+          "transactionHash": "={{ $json.hash }}",
+          "timestamp": "={{ $now }}"
+        },
+        "name": "Store Proof on Filecoin",
+        "type": "n8n-nodes-ticklu.filecoinStore",
+        "typeVersion": 1,
+        "position": [550, 300],
+        "id": "store-node"
+      },
+      {
+        "parameters": {
+          "proofId": "={{ $json.proofId }}"
+        },
+        "name": "Retrieve Proof",
+        "type": "n8n-nodes-ticklu.filecoinRetrieve",
+        "typeVersion": 1,
+        "position": [850, 300],
+        "id": "retrieve-node"
+      }
+    ],
+    "connections": {
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Execute NEAR Payout",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Execute NEAR Payout": {
+        "main": [
+          [
+            {
+              "node": "Store Proof on Filecoin",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Store Proof on Filecoin": {
+        "main": [
+          [
+            {
+              "node": "Retrieve Proof",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    }
+  }
+  
